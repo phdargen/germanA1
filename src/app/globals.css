@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f0f9ff;
+  --foreground: #0f172a;
+  --card-bg: #ffffff;
+  --card-border: #e0f2fe;
+  --accent: #0284c7;
+  --accent-hover: #0369a1;
+  --muted: #64748b;
 }
 
 @theme inline {
@@ -14,13 +19,111 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #020617;
+    --foreground: #f1f5f9;
+    --card-bg: #0f172a;
+    --card-border: #1e3a5f;
+    --accent: #38bdf8;
+    --accent-hover: #7dd3fc;
+    --muted: #94a3b8;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Flashcard 3D flip */
+.flashcard-scene {
+  perspective: 1200px;
+  min-height: 18rem;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  min-height: 18rem;
+  transform-style: preserve-3d;
+  transition: transform 0.22s ease;
+}
+
+.flashcard-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: stretch;
+  backface-visibility: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  box-shadow:
+    0 1px 3px rgb(14 165 233 / 0.08),
+    0 8px 24px rgb(14 165 233 / 0.06);
+}
+
+.flashcard-back {
+  transform: rotateY(180deg);
+  background: color-mix(in srgb, var(--card-bg) 92%, #e0f2fe);
+}
+
+@media (prefers-color-scheme: dark) {
+  .flashcard-back {
+    background: color-mix(in srgb, var(--card-bg) 88%, #0c4a6e);
+  }
+
+  .flashcard-face {
+    box-shadow:
+      0 1px 3px rgb(0 0 0 / 0.25),
+      0 8px 24px rgb(56 189 248 / 0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flashcard-inner {
+    transition: none;
+  }
+
+  .flashcard-inner.is-flipped .flashcard-front {
+    visibility: hidden;
+  }
+
+  .flashcard-inner:not(.is-flipped) .flashcard-back {
+    visibility: hidden;
+  }
+
+  .flashcard-inner.is-flipped {
+    transform: none;
+  }
+
+  .flashcard-back {
+    transform: none;
+  }
+}
+
+/* Next-card enter */
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-enter {
+  animation: cardEnter 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-enter {
+    animation: none;
+  }
 }
