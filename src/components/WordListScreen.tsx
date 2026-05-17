@@ -7,6 +7,7 @@ import {
   getTranslation,
   getTranslationExamples,
 } from "@/lib/wordList";
+import type { Theme } from "@/lib/theme";
 import type { CategoryId, CategoryInfo, TranslationLang, VocabCard } from "@/lib/types";
 import { ALL_CATEGORY_ID } from "@/lib/types";
 import { HomeIcon } from "./icons";
@@ -17,7 +18,9 @@ type WordListScreenProps = {
   cards: VocabCard[];
   categories: CategoryInfo[];
   lang: TranslationLang;
+  theme: Theme;
   onLangChange: (lang: TranslationLang) => void;
+  onThemeToggle: () => void;
   onHome: () => void;
 };
 
@@ -25,7 +28,9 @@ export function WordListScreen({
   cards,
   categories,
   lang,
+  theme,
   onLangChange,
+  onThemeToggle,
   onHome,
 }: WordListScreenProps) {
   const [categoryId, setCategoryId] = useState<CategoryId>(ALL_CATEGORY_ID);
@@ -42,8 +47,10 @@ export function WordListScreen({
       <SettingsHeader
         lang={lang}
         direction="de-to-target"
+        theme={theme}
         onLangChange={onLangChange}
         onDirectionChange={() => {}}
+        onThemeToggle={onThemeToggle}
         hideDirectionToggle
         left={
           <IconButton label="Back to home" onClick={onHome}>

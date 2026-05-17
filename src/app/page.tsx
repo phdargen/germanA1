@@ -6,6 +6,7 @@ import { SessionScreen } from "@/components/SessionScreen";
 import { WordListScreen } from "@/components/WordListScreen";
 import { buildCategories, parseVocabCsv } from "@/lib/csv";
 import { buildSessionDeck } from "@/lib/deck";
+import { applyTheme, persistTheme, type Theme } from "@/lib/theme";
 import type {
   CategoryId,
   CategoryInfo,
@@ -30,6 +31,19 @@ export default function Home() {
   const [lang, setLang] = useState<TranslationLang>("en");
   const [direction, setDirection] = useState<PracticeDirection>("de-to-target");
   const [loadToken, setLoadToken] = useState(0);
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof document === "undefined") return "light";
+    return document.documentElement.classList.contains("dark") ? "dark" : "light";
+  });
+
+  const toggleTheme = useCallback(() => {
+    setTheme((current) => {
+      const next: Theme = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+      persistTheme(next);
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -83,6 +97,12 @@ export default function Home() {
     [cards],
   );
 
+  const handlePrev = useCallback(() => {
+    if (index <= 0) return;
+    setIndex((i) => i - 1);
+    setFlipped(false);
+  }, [index]);
+
   const handleNext = useCallback(() => {
     if (index >= deck.length - 1) {
       goHome();
@@ -121,7 +141,9 @@ export default function Home() {
         cards={cards}
         categories={categories}
         lang={lang}
+        theme={theme}
         onLangChange={setLang}
+        onThemeToggle={toggleTheme}
         onHome={goHome}
       />
     );
@@ -135,9 +157,12 @@ export default function Home() {
         flipped={flipped}
         lang={lang}
         direction={direction}
+        theme={theme}
         onLangChange={setLang}
         onDirectionChange={setDirection}
+        onThemeToggle={toggleTheme}
         onFlip={() => setFlipped((f) => !f)}
+        onPrev={handlePrev}
         onNext={handleNext}
         onHome={goHome}
       />
@@ -149,8 +174,10 @@ export default function Home() {
       categories={categories}
       lang={lang}
       direction={direction}
+      theme={theme}
       onLangChange={setLang}
       onDirectionChange={setDirection}
+      onThemeToggle={toggleTheme}
       onSelectCategory={startSession}
       onOpenWordList={() => setView("list")}
     />

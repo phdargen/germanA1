@@ -1,12 +1,17 @@
 import type { ReactNode } from "react";
+import type { Theme } from "@/lib/theme";
 import type { PracticeDirection, TranslationLang } from "@/lib/types";
+import { MoonIcon, SunIcon } from "./icons";
+import { IconButton } from "./IconButton";
 import { SegmentedToggle } from "./SegmentedToggle";
 
 type SettingsHeaderProps = {
   lang: TranslationLang;
   direction: PracticeDirection;
+  theme: Theme;
   onLangChange: (lang: TranslationLang) => void;
   onDirectionChange: (direction: PracticeDirection) => void;
+  onThemeToggle: () => void;
   left?: ReactNode;
   hideDirectionToggle?: boolean;
 };
@@ -16,6 +21,8 @@ export function SettingsHeader({
   direction,
   onLangChange,
   onDirectionChange,
+  theme,
+  onThemeToggle,
   left,
   hideDirectionToggle = false,
 }: SettingsHeaderProps) {
@@ -43,6 +50,13 @@ export function SettingsHeader({
             ]}
           />
         )}
+        <IconButton
+          label={theme === "dark" ? "Light mode" : "Dark mode"}
+          onClick={onThemeToggle}
+          className="h-9 w-9"
+        >
+          {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+        </IconButton>
       </div>
     </header>
   );

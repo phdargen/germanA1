@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f0f9ff;
   --foreground: #0f172a;
@@ -17,16 +19,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020617;
-    --foreground: #f1f5f9;
-    --card-bg: #0f172a;
-    --card-border: #1e3a5f;
-    --accent: #38bdf8;
-    --accent-hover: #7dd3fc;
-    --muted: #94a3b8;
-  }
+.dark {
+  --background: #020617;
+  --foreground: #f1f5f9;
+  --card-bg: #0f172a;
+  --card-border: #1e3a5f;
+  --accent: #38bdf8;
+  --accent-hover: #7dd3fc;
+  --muted: #94a3b8;
 }
 
 body {
@@ -72,16 +72,14 @@ body {
   background: color-mix(in srgb, var(--card-bg) 92%, #e0f2fe);
 }
 
-@media (prefers-color-scheme: dark) {
-  .flashcard-back {
-    background: color-mix(in srgb, var(--card-bg) 88%, #0c4a6e);
-  }
+.dark .flashcard-back {
+  background: color-mix(in srgb, var(--card-bg) 88%, #0c4a6e);
+}
 
-  .flashcard-face {
-    box-shadow:
-      0 1px 3px rgb(0 0 0 / 0.25),
-      0 8px 24px rgb(56 189 248 / 0.08);
-  }
+.dark .flashcard-face {
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 0.25),
+    0 8px 24px rgb(56 189 248 / 0.08);
 }
 
 @media (prefers-reduced-motion: reduce) {

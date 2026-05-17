@@ -1,11 +1,12 @@
 import { getCardFaces } from "@/lib/cardContent";
+import type { Theme } from "@/lib/theme";
 import type {
   PracticeDirection,
   TranslationLang,
   VocabCard,
 } from "@/lib/types";
 import { Flashcard } from "./Flashcard";
-import { FlipIcon, HomeIcon, NextIcon } from "./icons";
+import { FlipIcon, HomeIcon, NextIcon, PrevIcon } from "./icons";
 import { IconButton } from "./IconButton";
 import { SettingsHeader } from "./SettingsHeader";
 
@@ -15,9 +16,12 @@ type SessionScreenProps = {
   flipped: boolean;
   lang: TranslationLang;
   direction: PracticeDirection;
+  theme: Theme;
   onLangChange: (lang: TranslationLang) => void;
   onDirectionChange: (direction: PracticeDirection) => void;
+  onThemeToggle: () => void;
   onFlip: () => void;
+  onPrev: () => void;
   onNext: () => void;
   onHome: () => void;
 };
@@ -28,9 +32,12 @@ export function SessionScreen({
   flipped,
   lang,
   direction,
+  theme,
   onLangChange,
   onDirectionChange,
+  onThemeToggle,
   onFlip,
+  onPrev,
   onNext,
   onHome,
 }: SessionScreenProps) {
@@ -42,8 +49,10 @@ export function SessionScreen({
       <SettingsHeader
         lang={lang}
         direction={direction}
+        theme={theme}
         onLangChange={onLangChange}
         onDirectionChange={onDirectionChange}
+        onThemeToggle={onThemeToggle}
         left={
           <IconButton label="Back to categories" onClick={onHome}>
             <HomeIcon />
@@ -60,6 +69,13 @@ export function SessionScreen({
         cardKey={index}
       />
       <div className="flex justify-end gap-2 px-4 pb-6 pt-2">
+        <IconButton
+          label="Previous card"
+          onClick={onPrev}
+          disabled={index === 0}
+        >
+          <PrevIcon />
+        </IconButton>
         <IconButton label="Flip card" onClick={onFlip}>
           <FlipIcon />
         </IconButton>
